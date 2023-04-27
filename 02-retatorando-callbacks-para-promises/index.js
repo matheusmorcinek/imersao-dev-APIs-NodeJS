@@ -4,6 +4,8 @@
     3 - Get a address of a user by Id
 */
 
+const utils = require('util');
+
 function getUser() {
 
     const min = 1;
@@ -29,38 +31,48 @@ function getUser() {
 
 function getUserPhoneNumber(userID) {
 
-    return new promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
         setTimeout(() => {
             return resolve({
                 phone: '990203992',
                 areaCode: 55
             });
-        }, 2000);
+        }, 800);
     });
 }
 
-function getUserAddress(userID) {
+function getUserAddress(userID, callback) {
 
-    return new Promise((resolve, reject) => {
-
-        setTimeout(() => {
-            return resolve({
-                street: 'Av. Uruguaiana',
-                number: 1000
-            });
-        }, 2000);
-    });
+    setTimeout(() => {
+        return callback(null, {
+            street: 'Rua dos Bobos',
+            number: 0
+        });
+    }, 500);
 }
 
+const getUserAddressAsync = utils.promisify(getUserAddress);
 
 const userPromise = getUser();
 
-// userPromise.then((user) => {
-//     console.log('user', user);
-// }).catch((error) => {
-//     console.error('error', error);
-// });
-
-
-Promise.all()
+userPromise
+    .then(user => {
+        return getUserPhoneNumber(user.id).then(phone => {
+            return {
+                ...user,
+                phone: phone
+            }
+        })
+    }).then(result => {
+        const address = getUserAddressAsync(result.id);
+        return address.then(address => {
+            return {
+                ...result,
+                address: address
+            }
+        });
+    }).then(result => {
+        console.log('result', result)
+    })
+    .catch(error => console.error(error));
