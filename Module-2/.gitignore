@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Built output
+dist/
+
+# Mac files
+.DS_Store
+
+# Cache files
+*.swp
+*.swo
+*.cache
+
+# IDE files
+.vscode/
+.idea/
+
+# Test results
+coverage/
+
+# OS generated files
+Thumbs.db
+.DS_Store?
+ehthumbs.db
+Desktop.ini
